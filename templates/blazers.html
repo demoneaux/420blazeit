@@ -1,0 +1,21 @@
+{% extends 'templates/base.html' %}
+{% block content %}
+{% if blazers %}
+<table>
+  <tr>
+    <th>Serial No.</th>
+    <th>Size</th>
+    <th>Gender</th>
+  </tr>
+  {% for blazer in blazers %}
+  <tr>
+    <td><a href="/blazer/{{ blazer.serial_number }}">{{ blazer.serial_number }}</a></td>
+    <td>{{ blazer.size }}</a></td>
+    <td>{{ blazer.gender }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+  <p>There are no blazers.</p>
+{% endif %}
+{% endblock content %}

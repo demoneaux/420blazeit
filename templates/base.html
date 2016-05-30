@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title }} - 420blazeit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/resources/all.css">
+</head>
+<body>
+  <div id="header-container">
+    <header>
+      <h1><a href="/">420blazeit</a></h1>
+      <nav>
+        <ul>
+          {% if user and user.level == 1 %}
+          <li><a href="/available">Available Blazers</a></li>
+          <li><a href="/loaned">Loaned Blazers</a></li>
+          {% endif %}
+          {% if user %}
+          <li><a href="{{ logoutUrl }}">Logout</a></li>
+          {% else %}
+          <li><a href="{{ loginUrl }}">Login</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </header>
+  </div>
+
+  <div id="main">
+  <article>
+    {% if user %}
+      {% if user.level == 0 %}
+        <h2>403 Forbidden</h2>
+        <p>You are not authorized to view this page.</p>
+      {% else %}
+        <h2>{{ title }}</h2>
+        {% block content %}
+        {% endblock content %}
+      {% endif %}
+
+      <p>
+        Logged in as:
+        {% if user.name %}
+        {{ user.name }} ({{ user.email }})
+        {% else %}
+        {{ user.email }}
+        {% endif %}
+      </p>
+    {% else %}
+      <h2>Hello!</h2>
+      <p>Please log in.</p>
+    {% endif %}
+  </article>
+  </div>
+
+  <div id="footer-container">
+    <footer>
+      &copy; 2016 VJC SC
+    </footer>
+  </div>
+</body>
+</html>
