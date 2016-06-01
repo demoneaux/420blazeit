@@ -32,7 +32,7 @@ header, footer {
 	margin: 0 auto;
 }
 
-header a, footer {
+header a, header a:visited, footer {
 	text-align: center;
 	text-decoration: none;
 	color: white;
