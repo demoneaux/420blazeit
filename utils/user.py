@@ -1,6 +1,7 @@
 from google.appengine.api import users
 from app.models import User
 
+
 def get_user():
     current_user = users.get_current_user()
     if current_user:
@@ -16,6 +17,7 @@ def get_user():
             else:
                 user.level = 1
         return user
+
 
 def create_login_urls(path):
     login_url = users.create_login_url(path)

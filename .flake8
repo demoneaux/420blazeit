@@ -1,0 +1,4 @@
+[flake8]
+exclude = lib/*
+ignore = E712
+max-line-length = 80

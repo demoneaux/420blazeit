@@ -3,9 +3,14 @@ import os
 
 from . import user
 
+
 JINJA_ENVIRONMENT = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), '../')),
-    extensions=['jinja2.ext.autoescape'])
+    loader=jinja2.FileSystemLoader(
+        os.path.join(os.path.dirname(__file__), '../')
+    ),
+    extensions=['jinja2.ext.autoescape']
+)
+
 
 def send(jinja, name, options):
     template = JINJA_ENVIRONMENT.get_template('templates/' + name)
@@ -14,6 +19,7 @@ def send(jinja, name, options):
             configure(options, jinja.request)
         )
     )
+
 
 def configure(options, request):
     curr_user = user.get_user()

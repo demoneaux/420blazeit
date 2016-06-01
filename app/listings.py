@@ -4,12 +4,14 @@ import webapp2
 
 from utils import template, blazers
 
+
 class AvailableBlazersHandler(webapp2.RequestHandler):
     def get(self):
         template.send(self, 'listings.html', {
             'title': 'Available Blazers',
             'blazers': blazers.available(),
         })
+
 
 class LoanedBlazersHandler(webapp2.RequestHandler):
     def get(self):

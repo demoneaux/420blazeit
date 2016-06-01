@@ -12,9 +12,9 @@ before_install:
   -in secrets.tar.enc -out secrets.tar -d
 - tar xvf secrets.tar
 - tail -n +3 app.yaml > app.yaml.new && mv app.yaml.new app.yaml && cat app.yaml
-- pip install -r requirements.txt -t lib
-install: true
-script: true
+- pip install flake8
+install: pip install -r requirements.txt -t lib
+script: flake8 .
 deploy:
   provider: gae
   skip_cleanup: true

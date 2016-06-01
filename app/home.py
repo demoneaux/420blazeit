@@ -4,6 +4,7 @@ import webapp2
 
 from utils import user, template
 
+
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         curr_user = user.get_user()

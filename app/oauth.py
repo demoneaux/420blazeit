@@ -1,5 +1,3 @@
-import httplib2
-import logging
 import os
 import webapp2
 
@@ -9,15 +7,17 @@ from oauth2client.contrib import appengine
 
 from utils import template
 
+discoveryServiceUrl = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
 service = discovery.build(
     'sheets',
     'v4',
-    discoveryServiceUrl='https://sheets.googleapis.com/$discovery/rest?version=v4'
+    discoveryServiceUrl=discoveryServiceUrl
 )
 decorator = appengine.oauth2decorator_from_clientsecrets(
     os.path.join(os.path.dirname(__file__), '../client_secrets.json'),
     scope='https://www.googleapis.com/auth/spreadsheets'
 )
+
 
 class OauthHandler(webapp2.RequestHandler):
     @decorator.oauth_aware
@@ -27,6 +27,7 @@ class OauthHandler(webapp2.RequestHandler):
             'url': decorator.authorize_url(),
             'has_credentials': decorator.has_credentials()
         })
+
 
 class AboutHandler(webapp2.RequestHandler):
     @decorator.oauth_required
@@ -47,7 +48,8 @@ class AboutHandler(webapp2.RequestHandler):
             else:
                 self.response.write('Name, Major:')
                 for row in values:
-                    # Print columns A and E, which correspond to indices 0 and 4.
+                    # Print columns A and E,
+                    # which correspond to indices 0 and 4.
                     self.response.write('%s, %s' % (row[0], row[4]))
         except client.AccessTokenRefreshError:
             self.redirect('/oauth-test')

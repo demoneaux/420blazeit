@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 import webapp2
-from google.appengine.ext import ndb
 
 from utils import template
 from app.models import Blazer
+
 
 class BlazerHandler(webapp2.RequestHandler):
     def get(self, key):
@@ -15,6 +15,7 @@ class BlazerHandler(webapp2.RequestHandler):
             'blazer': blazer
         })
 
+
 class BlazerBookHandler(webapp2.RequestHandler):
     def post(self, key):
         blazer = Blazer.query(Blazer.serial_number == key).get()
@@ -22,6 +23,7 @@ class BlazerBookHandler(webapp2.RequestHandler):
         blazer.put()
 
         self.redirect('/blazer/' + key)
+
 
 class BlazerReturnHandler(webapp2.RequestHandler):
     def post(self, key):
