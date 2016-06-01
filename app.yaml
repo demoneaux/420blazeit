@@ -35,6 +35,9 @@ handlers:
   static_files: public/robots.txt
   upload: public\/robots\.txt
 
+error_handlers:
+  - file: templates/error.html
+
 libraries:
 - name: webapp2
   version: "2.5.2"

@@ -17,3 +17,11 @@ indexes:
     direction: desc
   - name: size
   - name: serial_number
+
+- kind: Blazer
+  properties:
+  - name: booked
+  - name: size
+  - name: gender
+    direction: desc
+  - name: serial_number

@@ -6,6 +6,16 @@ html, body, table {
 	-webkit-font-smoothing: antialiased;
 }
 
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+#main {
+  flex: 1;
+}
+
 #header-container {
 	background-color: #b53636;
 	background-color: rgba(181, 54, 54, 0.89);
