@@ -22,11 +22,6 @@ handlers:
   secure: always
   login: required
 
-- url: /populate
-  script: app.populate
-  secure: always
-  login: admin
-
 - url: /favicon\.ico
   static_files: public/favicon.ico
   upload: public\/favicon\.ico
