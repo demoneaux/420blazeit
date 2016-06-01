@@ -29,12 +29,12 @@ class OauthHandler(webapp2.RequestHandler):
         })
 
 
-class AboutHandler(webapp2.RequestHandler):
+class OauthViewerHandler(webapp2.RequestHandler):
     @decorator.oauth_required
     def get(self):
         try:
-            spreadsheetId = '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms'
-            rangeName = 'Class Data!A2:E'
+            spreadsheetId = '1zAZhntGqfdr8cSjZ0uunVAOQZhXhgDuiJ46gZzpyaPY'
+            rangeName = 'Class Data!A2:D'
             result = service.spreadsheets().values().get(
                 spreadsheetId=spreadsheetId,
                 range=rangeName
@@ -43,19 +43,38 @@ class AboutHandler(webapp2.RequestHandler):
             )
             values = result.get('values', [])
 
-            if not values:
-                self.response.write('No data found.')
-            else:
-                self.response.write('Name, Major:')
+            blazers = []
+            if values:
                 for row in values:
-                    # Print columns A and E,
-                    # which correspond to indices 0 and 4.
-                    self.response.write('%s, %s' % (row[0], row[4]))
+                    blazer = Blazer(
+                        serial_number=row[0],
+                        gender=row[1],
+                        size=row[2],
+                        booked=True if row[3] == 'Yes' else False
+                    )
+                    blazers.append(blazer)
+            template.send(self, 'listings.html', {
+                'title': 'Blazers',
+                'blazers': blazers
+            })
         except client.AccessTokenRefreshError:
             self.redirect('/oauth-test')
 
+
+class Blazer():
+    serial_number = ''
+    gender = ''
+    size = ''
+    booked = False
+
+    def __init__(self, serial_number, gender, size, booked):
+        self.serial_number = serial_number
+        self.gender = gender
+        self.size = size
+        self.booked = booked
+
 app = webapp2.WSGIApplication([
     ('/oauth-test', OauthHandler),
-    ('/oauth-test-page', AboutHandler),
+    ('/oauth-test-page', OauthViewerHandler),
     (decorator.callback_path, decorator.callback_handler())
 ], debug=True)
