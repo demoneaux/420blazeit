@@ -1,9 +1,8 @@
 # __init__.py
 
-from . import home, available, loaned, blazer, populate
+from . import home, listings, blazer, populate
 
 home = home.app
-available = available.app
-loaned = loaned.app
+listings = listings.app
 blazer = blazer.app
 populate = populate.app

@@ -5,12 +5,16 @@ def get_user():
     current_user = users.get_current_user()
     if current_user:
         email = current_user.email()
-        query = User.query(User.email == email)
-        user = query.get()
-        if not user and email.endswith('@vjc.sg'):
-            user = User(email=email, level=1)
-        else:
-            user = User(email=email, level=0)
+        user = User.query(User.email == email).get()
+        if user:
+            return user
+
+        user = User(email=email, level=0)
+        if email.endswith('@vjc.sg'):
+            if users.is_current_user_admin():
+                user.level = 2
+            else:
+                user.level = 1
         return user
 
 def create_login_urls(path):

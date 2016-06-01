@@ -13,7 +13,7 @@ indexes:
 - kind: Blazer
   properties:
   - name: booked
-  - name: size
   - name: gender
     direction: desc
+  - name: size
   - name: serial_number

@@ -4,14 +4,14 @@
 <table>
   <tr>
     <th>Serial No.</th>
-    <th>Size</th>
     <th>Gender</th>
+    <th>Size</th>
   </tr>
   {% for blazer in blazers %}
   <tr>
     <td><a href="/blazer/{{ blazer.serial_number }}">{{ blazer.serial_number }}</a></td>
-    <td>{{ blazer.size }}</a></td>
     <td>{{ blazer.gender }}</td>
+    <td>{{ blazer.size }}</td>
   </tr>
   {% endfor %}
 </table>

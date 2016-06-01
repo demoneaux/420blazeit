@@ -12,15 +12,10 @@ handlers:
   script: app.home
   secure: always
 
-- url: /loaned
-  script: app.loaned
+- url: /(loaned|available)
+  script: app.listings
   secure: always
-  login: required
-
-- url: /available
-  script: app.available
-  secure: always
-  login: required
+  login: admin
 
 - url: /blazer/.*
   script: app.blazer

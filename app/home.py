@@ -19,11 +19,13 @@ class MainHandler(webapp2.RequestHandler):
             return
         elif curr_user.level == 0:
             # not a vjc email
-            template.send(self, 'unauthorised.html', {
+            template.send(self, 'logout.html', {
                 'title': 'Unauthorised'
             })
         else:
-            self.redirect('/available')
+            template.send(self, 'home.html', {
+                'title': 'Home'
+            })
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
