@@ -35,6 +35,11 @@ handlers:
   static_files: public/robots.txt
   upload: public\/robots\.txt
 
+- url: /.*
+  script: app.oauth
+  secure: always
+  login: required
+
 error_handlers:
   - file: templates/error.html
 

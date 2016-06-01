@@ -1,0 +1,12 @@
+{% extends 'templates/base.html' %}
+{% block content %}
+{% if has_credentials %}
+<p>Thanks for granting us permission. Please <a href="/oauth-test-page">proceed to the main
+  application</a>.</p>
+{% else %}
+<p><a href="{{ url }}">Grant</a> this application permission to update your spreadsheets.</p>
+{% endif %}
+<p>You can always <a href="https://www.google.com/accounts/b/0/IssuedAuthSubTokens">revoke</a>
+permission at any time.</p>
+</table>
+{% endblock content %}
