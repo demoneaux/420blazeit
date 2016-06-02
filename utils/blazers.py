@@ -32,17 +32,23 @@ def generate_order(blazers):
             size = blazer.size
             start = i
             end = i + 1
+    # todo: remove repetition and cleanup code
+    if size not in order[gender]:
+        order[gender][str(size)] = (start, end)
     return order
 
 
 class Blazer():
-    serial_number = ''
-    gender = ''
-    size = ''
-    booked = False
-
     def __init__(self, serial_number, gender, size, booked):
         self.serial_number = serial_number
         self.gender = gender
         self.size = size
         self.booked = booked
+
+    def __str__(self):
+        return '<Blazer %s %s:%s%s>' % (
+            self.serial_number,
+            self.gender,
+            self.size,
+            ' Booked' if self.booked else ''
+        )
