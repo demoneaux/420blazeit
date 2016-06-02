@@ -1,26 +1,4 @@
-from app.models import Blazer
-
-
-def loaned():
-    blazers_query = Blazer.query(Blazer.booked == True).order(
-        -Blazer.gender,
-        Blazer.size,
-        Blazer.serial_number
-    )
-    blazers_list = blazers_query.fetch()
-    return cleanup(blazers_list)
-
-
-def available():
-    blazers_query = Blazer.query(Blazer.booked == False).order(
-        -Blazer.gender,
-        Blazer.size,
-        Blazer.serial_number
-    )
-    blazers_list = blazers_query.fetch()
-    return cleanup(blazers_list)
-
-genders = ['M', 'F']
+genders = ['Male', 'Female']
 sizes = ['XS', 'S', 'M', 'L', 'XL']
 
 
@@ -37,8 +15,8 @@ def cleanup(blazers):
 
 def generate_order(blazers):
     order = {
-        'M': {},
-        'F': {},
+        'Male': {},
+        'Female': {}
     }
     gender = ''
     size = ''
@@ -55,3 +33,16 @@ def generate_order(blazers):
             start = i
             end = i + 1
     return order
+
+
+class Blazer():
+    serial_number = ''
+    gender = ''
+    size = ''
+    booked = False
+
+    def __init__(self, serial_number, gender, size, booked):
+        self.serial_number = serial_number
+        self.gender = gender
+        self.size = size
+        self.booked = booked

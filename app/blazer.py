@@ -3,7 +3,7 @@
 import webapp2
 
 from utils import template
-from app.models import Blazer
+from utils.blazers import Blazer
 
 
 class BlazerHandler(webapp2.RequestHandler):
