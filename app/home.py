@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import webapp2
+import logging
 
 from utils import user, template
 
@@ -28,6 +29,19 @@ class MainHandler(webapp2.RequestHandler):
                 'title': 'Home'
             })
 
+
+def handle_404(request, response, exception):
+    logging.exception(exception)
+    response.write('Oops! I could swear this page was here!')
+    response.set_status(404)
+
+def handle_500(request, response, exception):
+    logging.exception(exception)
+    response.write('Oops! I could swear this page was here!')
+    response.set_status(500)
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
 ], debug=True)
+app.error_handlers[404] = handle_404
+app.error_handlers[500] = handle_500

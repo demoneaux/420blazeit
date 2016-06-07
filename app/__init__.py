@@ -1,7 +1,6 @@
 # __init__.py
 
-from . import home, listings, blazer
+from . import home, main
 
 home = home.app
-listings = listings.app
-blazer = blazer.app
+main = main.app

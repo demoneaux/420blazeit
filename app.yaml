@@ -8,19 +8,10 @@ handlers:
 - url: /resources
   static_dir: public/resources
 
-- url: /
-  script: app.home
-  secure: always
-
-- url: /(loaned|available|oauth2callback)
-  script: app.listings
+- url: /(loaned|available|oauth2callback|blazer/.*)
+  script: app.main
   secure: always
   login: admin
-
-- url: /blazer/.*
-  script: app.blazer
-  secure: always
-  login: required
 
 - url: /favicon\.ico
   static_files: public/favicon.ico
@@ -29,6 +20,10 @@ handlers:
 - url: /robots\.txt
   static_files: public/robots.txt
   upload: public\/robots\.txt
+
+- url: /.*
+  script: app.home
+  secure: always
 
 error_handlers:
   - file: templates/error.html

@@ -1,5 +1,6 @@
 {% extends 'templates/base.html' %}
 {% block content %}
+{% if blazer %}
 <table>
   <tr>
     <th>Serial No.</th>
@@ -34,4 +35,9 @@
     </td>
   </tr>
 </table>
+{% else %}
+<p>
+  The blazer could not be found.
+</p>
+{% endif %}
 {% endblock content %}
