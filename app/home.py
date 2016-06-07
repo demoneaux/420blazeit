@@ -35,6 +35,7 @@ def handle_404(request, response, exception):
     response.write('Oops! I could swear this page was here!')
     response.set_status(404)
 
+
 def handle_500(request, response, exception):
     logging.exception(exception)
     response.write('Oops! I could swear this page was here!')

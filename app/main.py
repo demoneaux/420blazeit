@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-import webapp2, logging
+import webapp2
 
 from googleapiclient import discovery
 from oauth2client import client
@@ -85,6 +85,7 @@ class LoanedBlazersHandler(webapp2.RequestHandler):
         except client.AccessTokenRefreshError:
             self.redirect('/')
 
+
 class BlazerHandler(webapp2.RequestHandler):
     @decorator.oauth_required
     def get(self, serial_number):
@@ -126,6 +127,7 @@ class BlazerHandler(webapp2.RequestHandler):
         except client.AccessTokenRefreshError:
             self.redirect('/')
 
+
 class BlazerBookHandler(webapp2.RequestHandler):
     @decorator.oauth_required
     def post(self, serial_number):
@@ -139,12 +141,11 @@ class BlazerBookHandler(webapp2.RequestHandler):
                 http=decorator.http()
             ).get('values', [])
 
-            blazer = None
             for i, row in enumerate(values):
                 if row[0] == serial_number:
-                    blazer_row = i + 2
-                    blazer_range = 'Class Data!D%d:D%d' % (blazer_row, blazer_row)
-                    results = service.spreadsheets().values().update(
+                    row = i + 2
+                    blazer_range = 'Class Data!D%d:D%d' % (row, row)
+                    service.spreadsheets().values().update(
                         spreadsheetId=spreadsheetId,
                         range=blazer_range,
                         valueInputOption='RAW',
@@ -154,13 +155,13 @@ class BlazerBookHandler(webapp2.RequestHandler):
                     ).execute(
                         http=decorator.http()
                     )
-                    logging.info(results)
 
                     self.redirect('/blazer/' + serial_number)
                     return
 
         except client.AccessTokenRefreshError:
             self.redirect('/blazer/' + serial_number)
+
 
 class BlazerReturnHandler(webapp2.RequestHandler):
     @decorator.oauth_required
@@ -175,11 +176,10 @@ class BlazerReturnHandler(webapp2.RequestHandler):
                 http=decorator.http()
             ).get('values', [])
 
-            blazer = None
             for i, row in enumerate(values):
                 if row[0] == serial_number:
-                    blazer_row = i + 2
-                    blazer_range = 'Class Data!D%d:D%d' % (blazer_row, blazer_row)
+                    row = i + 2
+                    blazer_range = 'Class Data!D%d:D%d' % (row, row)
                     service.spreadsheets().values().update(
                         spreadsheetId=spreadsheetId,
                         range=blazer_range,
