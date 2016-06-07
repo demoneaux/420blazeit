@@ -19,7 +19,9 @@ def get_user():
         return user
 
 
-def create_login_urls(path):
-    login_url = users.create_login_url(path)
-    logout_url = users.create_logout_url('/')
-    return login_url, logout_url
+def create_login_url(path):
+    return users.create_login_url(path)
+
+
+def create_logout_url():
+    return users.create_logout_url('/')

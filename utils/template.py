@@ -12,24 +12,22 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 )
 
 
-def send(jinja, name, options):
+def send(app, name, options):
     template = JINJA_ENVIRONMENT.get_template('templates/' + name)
-    jinja.response.out.write(
+    app.response.out.write(
         template.render(
-            configure(options, jinja.request)
+            configure(options, app.request)
         )
     )
 
 
 def configure(options, request):
     curr_user = user.get_user()
-    login_url, logout_url = user.create_login_urls(request.path)
+    options['user'] = curr_user
 
     if not curr_user:
-        options['loginUrl'] = login_url
+        options['loginUrl'] = user.create_login_url(request.path)
     else:
-        options['logoutUrl'] = logout_url
-
-    options['user'] = curr_user
+        options['logoutUrl'] = user.create_logout_url()
 
     return options

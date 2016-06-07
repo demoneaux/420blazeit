@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import os
 import webapp2
 
@@ -7,7 +5,7 @@ from googleapiclient import discovery
 from oauth2client import client
 from oauth2client.contrib import appengine
 
-from utils import template
+from utils import template, spreadsheets
 from utils.blazers import Blazer, cleanup
 
 discoveryServiceUrl = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
@@ -26,14 +24,11 @@ class AvailableBlazersHandler(webapp2.RequestHandler):
     @decorator.oauth_required
     def get(self):
         try:
-            spreadsheetId = '1zAZhntGqfdr8cSjZ0uunVAOQZhXhgDuiJ46gZzpyaPY'
-            rangeName = 'Class Data!A2:D'
-            values = service.spreadsheets().values().get(
-                spreadsheetId=spreadsheetId,
-                range=rangeName
-            ).execute(
-                http=decorator.http()
-            ).get('values', [])
+            values = spreadsheets.get_values(
+                'Class Data!A2:D',
+                service,
+                decorator
+            )
 
             blazers = []
             for row in values:
@@ -58,14 +53,11 @@ class LoanedBlazersHandler(webapp2.RequestHandler):
     @decorator.oauth_required
     def get(self):
         try:
-            spreadsheetId = '1zAZhntGqfdr8cSjZ0uunVAOQZhXhgDuiJ46gZzpyaPY'
-            rangeName = 'Class Data!A2:D'
-            values = service.spreadsheets().values().get(
-                spreadsheetId=spreadsheetId,
-                range=rangeName
-            ).execute(
-                http=decorator.http()
-            ).get('values', [])
+            values = spreadsheets.get_values(
+                'Class Data!A2:D',
+                service,
+                decorator
+            )
 
             blazers = []
             for row in values:
@@ -90,26 +82,23 @@ class BlazerHandler(webapp2.RequestHandler):
     @decorator.oauth_required
     def get(self, serial_number):
         try:
-            spreadsheetId = '1zAZhntGqfdr8cSjZ0uunVAOQZhXhgDuiJ46gZzpyaPY'
-            rangeName = 'Class Data!A2:A'
-            values = service.spreadsheets().values().get(
-                spreadsheetId=spreadsheetId,
-                range=rangeName
-            ).execute(
-                http=decorator.http()
-            ).get('values', [])
+            values = spreadsheets.get_values(
+                'Class Data!A2:A',
+                service,
+                decorator
+            )
 
             blazer = None
             for i, row in enumerate(values):
                 if not blazer and row[0] == serial_number:
                     blazer_row = i + 2
                     blazer_range = 'A%d:D%d' % (blazer_row, blazer_row)
-                    blazer_data = service.spreadsheets().values().get(
-                        spreadsheetId=spreadsheetId,
-                        range=blazer_range
-                    ).execute(
-                        http=decorator.http()
-                    ).get('values', None)
+                    blazer_data = spreadsheets.get_values(
+                        blazer_range,
+                        service,
+                        decorator,
+                        defaultValue=None
+                    )
 
                     if blazer_data:
                         blazer_data = blazer_data[0]
@@ -132,28 +121,23 @@ class BlazerBookHandler(webapp2.RequestHandler):
     @decorator.oauth_required
     def post(self, serial_number):
         try:
-            spreadsheetId = '1zAZhntGqfdr8cSjZ0uunVAOQZhXhgDuiJ46gZzpyaPY'
-            rangeName = 'Class Data!A2:A'
-            values = service.spreadsheets().values().get(
-                spreadsheetId=spreadsheetId,
-                range=rangeName
-            ).execute(
-                http=decorator.http()
-            ).get('values', [])
+            values = spreadsheets.get_values(
+                'Class Data!A2:A',
+                service,
+                decorator
+            )
 
             for i, row in enumerate(values):
                 if row[0] == serial_number:
                     row = i + 2
                     blazer_range = 'Class Data!D%d:D%d' % (row, row)
-                    service.spreadsheets().values().update(
-                        spreadsheetId=spreadsheetId,
-                        range=blazer_range,
-                        valueInputOption='RAW',
-                        body={
+                    spreadsheets.update_values(
+                        blazer_range,
+                        {
                             'values': [['Yes']]
-                        }
-                    ).execute(
-                        http=decorator.http()
+                        },
+                        service,
+                        decorator
                     )
 
                     self.redirect('/blazer/' + serial_number)
@@ -167,28 +151,23 @@ class BlazerReturnHandler(webapp2.RequestHandler):
     @decorator.oauth_required
     def post(self, serial_number):
         try:
-            spreadsheetId = '1zAZhntGqfdr8cSjZ0uunVAOQZhXhgDuiJ46gZzpyaPY'
-            rangeName = 'Class Data!A2:A'
-            values = service.spreadsheets().values().get(
-                spreadsheetId=spreadsheetId,
-                range=rangeName
-            ).execute(
-                http=decorator.http()
-            ).get('values', [])
+            values = spreadsheets.get_values(
+                'Class Data!A2:A',
+                service,
+                decorator
+            )
 
             for i, row in enumerate(values):
                 if row[0] == serial_number:
                     row = i + 2
                     blazer_range = 'Class Data!D%d:D%d' % (row, row)
-                    service.spreadsheets().values().update(
-                        spreadsheetId=spreadsheetId,
-                        range=blazer_range,
-                        valueInputOption='RAW',
-                        body={
+                    spreadsheets.update_values(
+                        blazer_range,
+                        {
                             'values': [['No']]
-                        }
-                    ).execute(
-                        http=decorator.http()
+                        },
+                        service,
+                        decorator
                     )
 
                     self.redirect('/blazer/' + serial_number)

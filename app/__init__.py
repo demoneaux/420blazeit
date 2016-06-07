@@ -1,5 +1,3 @@
-# __init__.py
-
 from . import home, main
 
 home = home.app
