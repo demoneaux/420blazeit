@@ -1,7 +1,7 @@
 import jinja2
 import os
 
-from . import user
+from . import user, spreadsheets
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -29,5 +29,7 @@ def configure(options, request):
         options['loginUrl'] = user.create_login_url(request.path)
     else:
         options['logoutUrl'] = user.create_logout_url()
+
+    options['spreadsheetId'] = spreadsheets.spreadsheetId
 
     return options

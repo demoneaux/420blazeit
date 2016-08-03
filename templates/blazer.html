@@ -1,4 +1,5 @@
 {% extends 'templates/base.html' %}
+{% from 'templates/macros.html' import label, input %}
 {% block content %}
 {% if blazer %}
 <table>
@@ -14,34 +15,81 @@
     <th>Gender</th>
     <td>{{ blazer.gender }}</td>
   </tr>
+  {% if blazer.booked %}
   <tr>
-    <th>Booked</th>
+    <th>Borrower Name</th>
+    <td>{{ blazer.borrower.name }}</td>
+  </tr>
+  <tr>
+    <th>Class</th>
+    <td>{{ blazer.borrower.class }}</td>
+  </tr>
+  <tr>
+    <th>Contact</th>
+    <td>{{ blazer.borrower.contact }}</td>
+  </tr>
+  <tr>
+    <th>Date Borrowed</th>
+    <td>{{ blazer.borrower.date_borrowed }}</td>
+  </tr>
+  <tr>
+    <th>Booking Status</th>
     <td>
-      {% if blazer.booked %}
-        Currently booked<br>
+      Currently booked<br>
 
-        {% set return_action = '/blazer/' ~ blazer.serial_number ~ '/return' %}
-        <form action="{{ return_action }}" method="POST">
+      {% set return_action = '/blazer/' ~ blazer.serial_number ~ '/return' %}
+      <form action="{{ return_action }}" method="POST">
+        <label for="isbooked" id="isbookedlabel">Return</label><input type="checkbox" value="book" id="isbooked">
+        <div>
+          {{ label('returned', 'Date Returned') }}
+          {{ input('returned', placeholder='DD/MM/YYYY') }}
+        </div>
+        <div>
           <input type="submit" value="Return">
-        </form>
-      {% else %}
+        </div>
+      </form>
+    </td>
+  </tr>
+  {% else %}
+  <tr>
+    <th>Booking Status</th>
+    <td>
         Not booked<br>
 
         {% set book_action = '/blazer/' ~ blazer.serial_number ~ '/book' %}
         <form action="{{ book_action }}" method="POST">
-          <input type="submit" value="Book">
+          <label for="isbooked" id="isbookedlabel">Book</label><input type="checkbox" value="book" id="isbooked">
+          <div>
+            {{ label('name', 'Name') }}
+            {{ input('name', placeholder='John Applesmith') }}
+          </div>
+          <div>
+            {{ label('class', 'Class') }}
+            {{ input('class', placeholder='16S51') }}
+          </div>
+          <div>
+            {{ label('contact', 'Contact Number') }}
+            {{ input('contact', placeholder='98765432') }}
+          </div>
+          <div>
+            {{ label('borrowed', 'Date Borrowed') }}
+            {{ input('borrowed', placeholder='DD/MM/YYYY') }}
+          </div>
+          <div>
+            <input type="submit" value="Book">
+          </div>
         </form>
-      {% endif %}
     </td>
   </tr>
+  {% endif %}
 </table>
 <p>
-  View the <a href="https://docs.google.com/spreadsheets/d/1zAZhntGqfdr8cSjZ0uunVAOQZhXhgDuiJ46gZzpyaPY/edit#gid=0">spreadsheet</a>.
+  View the <a href="https://docs.google.com/spreadsheets/d/{{ spreadsheetId }}/edit#gid=0" target="_blank">spreadsheet</a>.
 </p>
 {% else %}
 <p>
   The blazer could not be found.<br>
-  View the <a href="https://docs.google.com/spreadsheets/d/1zAZhntGqfdr8cSjZ0uunVAOQZhXhgDuiJ46gZzpyaPY/edit#gid=0">spreadsheet</a>.
+  View the <a href="https://docs.google.com/spreadsheets/d/{{ spreadsheetId }}/edit#gid=0" target="_blank">spreadsheet</a>.
 </p>
 {% endif %}
 {% endblock content %}

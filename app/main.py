@@ -6,7 +6,7 @@ from oauth2client import client
 from oauth2client.contrib import appengine
 
 from utils import template, spreadsheets
-from utils.blazers import Blazer, cleanup
+from utils.blazers import create_blazer, cleanup
 
 discoveryServiceUrl = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
 service = discovery.build(
@@ -25,7 +25,7 @@ class AvailableBlazersHandler(webapp2.RequestHandler):
     def get(self):
         try:
             values = spreadsheets.get_values(
-                'Class Data!A2:D',
+                'Database!A2:D',
                 service,
                 decorator
             )
@@ -33,12 +33,7 @@ class AvailableBlazersHandler(webapp2.RequestHandler):
             blazers = []
             for row in values:
                 if row[3] == 'No':
-                    blazer = Blazer(
-                        serial_number=row[0],
-                        gender=row[1],
-                        size=row[2],
-                        booked=False
-                    )
+                    blazer = create_blazer(row)
                     blazers.append(blazer)
 
             template.send(self, 'listings.html', {
@@ -54,7 +49,7 @@ class LoanedBlazersHandler(webapp2.RequestHandler):
     def get(self):
         try:
             values = spreadsheets.get_values(
-                'Class Data!A2:D',
+                'Database!A2:D',
                 service,
                 decorator
             )
@@ -62,12 +57,7 @@ class LoanedBlazersHandler(webapp2.RequestHandler):
             blazers = []
             for row in values:
                 if row[3] == 'Yes':
-                    blazer = Blazer(
-                        serial_number=row[0],
-                        gender=row[1],
-                        size=row[2],
-                        booked=True
-                    )
+                    blazer = create_blazer(row)
                     blazers.append(blazer)
 
             template.send(self, 'listings.html', {
@@ -83,7 +73,7 @@ class BlazerHandler(webapp2.RequestHandler):
     def get(self, serial_number):
         try:
             values = spreadsheets.get_values(
-                'Class Data!A2:A',
+                'Database!A2:A',
                 service,
                 decorator
             )
@@ -92,7 +82,7 @@ class BlazerHandler(webapp2.RequestHandler):
             for i, row in enumerate(values):
                 if not blazer and row[0] == serial_number:
                     blazer_row = i + 2
-                    blazer_range = 'A%d:D%d' % (blazer_row, blazer_row)
+                    blazer_range = 'A%d:H%d' % (blazer_row, blazer_row)
                     blazer_data = spreadsheets.get_values(
                         blazer_range,
                         service,
@@ -102,12 +92,7 @@ class BlazerHandler(webapp2.RequestHandler):
 
                     if blazer_data:
                         blazer_data = blazer_data[0]
-                        blazer = Blazer(
-                            serial_number=blazer_data[0],
-                            gender=blazer_data[1],
-                            size=blazer_data[2],
-                            booked=True if blazer_data[3] == 'Yes' else False
-                        )
+                        blazer = create_blazer(blazer_data)
 
             template.send(self, 'blazer.html', {
                 'title': 'Blazer: ' + serial_number,
@@ -122,19 +107,29 @@ class BlazerBookHandler(webapp2.RequestHandler):
     def post(self, serial_number):
         try:
             values = spreadsheets.get_values(
-                'Class Data!A2:A',
+                'Database!A2:A',
                 service,
                 decorator
             )
+            borrower_name = self.request.get('name')
+            borrower_class = self.request.get('class')
+            borrower_contact = self.request.get('contact')
+            borrowed_date = self.request.get('borrowed')
 
             for i, row in enumerate(values):
                 if row[0] == serial_number:
                     row = i + 2
-                    blazer_range = 'Class Data!D%d:D%d' % (row, row)
+                    blazer_range = 'Database!D%d:H%d' % (row, row)
                     spreadsheets.update_values(
                         blazer_range,
                         {
-                            'values': [['Yes']]
+                            'values': [[
+                                'Yes',
+                                borrower_name,
+                                borrower_class,
+                                borrower_contact,
+                                borrowed_date
+                            ]]
                         },
                         service,
                         decorator
@@ -152,7 +147,7 @@ class BlazerReturnHandler(webapp2.RequestHandler):
     def post(self, serial_number):
         try:
             values = spreadsheets.get_values(
-                'Class Data!A2:A',
+                'Database!A2:A',
                 service,
                 decorator
             )
@@ -160,11 +155,11 @@ class BlazerReturnHandler(webapp2.RequestHandler):
             for i, row in enumerate(values):
                 if row[0] == serial_number:
                     row = i + 2
-                    blazer_range = 'Class Data!D%d:D%d' % (row, row)
+                    blazer_range = 'Database!D%d:G%d' % (row, row)
                     spreadsheets.update_values(
                         blazer_range,
                         {
-                            'values': [['No']]
+                            'values': [['No', '', '', '']]
                         },
                         service,
                         decorator

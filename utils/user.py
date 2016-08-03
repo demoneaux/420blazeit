@@ -7,15 +7,14 @@ def get_user():
     if current_user:
         email = current_user.email()
         user = User.query(User.email == email).get()
+
         if user:
             return user
 
         user = User(email=email, level=0)
-        if email.endswith('@vjc.sg'):
-            if users.is_current_user_admin():
-                user.level = 2
-            else:
-                user.level = 1
+        if email == 'loans.vjc@gmail.com':
+            user.level = 1
+
         return user
 
 

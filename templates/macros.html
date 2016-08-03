@@ -2,7 +2,7 @@
 <input type="{{ type }}" name="{{ name }}" id="{{ name }}" value="{{ value|e }}"{% if required %} required{% endif %}{% if placeholder %} placeholder="{{ placeholder }}"{% endif %}>
 {%- endmacro %}
 
-{% macro label(value, name) -%}
+{% macro label(name, value) -%}
 <label for="{{ name }}">{{ value }}</label>
 {%- endmacro %}
 

@@ -153,3 +153,23 @@ footer {
 	color: #b53636;
 	color: rgba(181, 54, 54, 0.89);
 }
+
+#isbooked {
+	display: none;
+}
+
+#isbookedlabel {
+	display: inline-block;
+	padding: 5px;
+	background: #eee;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+
+form div {
+	display: none;
+}
+
+#isbooked:checked ~ div {
+	display: block;
+}
