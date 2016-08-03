@@ -33,8 +33,7 @@ class AvailableBlazersHandler(webapp2.RequestHandler):
             blazers = []
             for row in values:
                 if row[3] == 'No':
-                    blazer = create_blazer(row)
-                    blazers.append(blazer)
+                    blazers.append(create_blazer(row))
 
             template.send(self, 'listings.html', {
                 'title': 'Available Blazers',
@@ -57,8 +56,7 @@ class LoanedBlazersHandler(webapp2.RequestHandler):
             blazers = []
             for row in values:
                 if row[3] == 'Yes':
-                    blazer = create_blazer(row)
-                    blazers.append(blazer)
+                    blazers.append(create_blazer(row))
 
             template.send(self, 'listings.html', {
                 'title': 'Loaned Blazers',
@@ -91,8 +89,7 @@ class BlazerHandler(webapp2.RequestHandler):
                     )
 
                     if blazer_data:
-                        blazer_data = blazer_data[0]
-                        blazer = create_blazer(blazer_data)
+                        blazer = create_blazer(blazer_data[0])
 
             template.send(self, 'blazer.html', {
                 'title': 'Blazer: ' + serial_number,
