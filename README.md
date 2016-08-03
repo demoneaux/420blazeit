@@ -1,4 +1,4 @@
-# [420blazeit](https://vjcblazer.appspot.com/) [![Build Status](https://travis-ci.org/demoneaux/420blazeit.svg?branch=master)](https://travis-ci.org/demoneaux/420blazeit)
+# [420blazeit](https://vjcblazer.appspot.com/) [![Build Status](https://travis-ci.org/vjmakers/420blazeit.svg?branch=master)](https://travis-ci.org/vjmakers/420blazeit)
 
 An online platform for loaning VJC blazers integrated with Google Spreadsheets.
 
@@ -15,5 +15,5 @@ An online platform for loaning VJC blazers integrated with Google Spreadsheets.
 
 **Notes**:
 
-* A VJC email account (`vjc.sg`) must be used.
+* The email `loans.vjc@gmail.com` must be used.
 * Some of the pages require admin access.

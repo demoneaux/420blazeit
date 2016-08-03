@@ -1,7 +1,5 @@
 *.py[cod]
 .DS_Store
-.vagrant
-Vagrantfile
 lib
 client_secrets.json
 service_account.json
