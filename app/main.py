@@ -1,5 +1,6 @@
 import os
 import webapp2
+import logging
 
 from googleapiclient import discovery
 from oauth2client import client
@@ -148,22 +149,62 @@ class BlazerReturnHandler(webapp2.RequestHandler):
                 service,
                 decorator
             )
-
+            id_blazer = serial_number
+            borrowed_name = ''
+            borrowed_class = ''
+            borrower_contact = ''
+            borrowed_date = ''
+            returned_date = self.request.get('returned')
+            logging.info(returned_date)
             for i, row in enumerate(values):
                 if row[0] == serial_number:
                     row = i + 2
-                    blazer_range = 'Database!D%d:G%d' % (row, row)
+                    blazer_range = 'Database!D%d:H%d' % (row, row)
+                    logs = spreadsheets.get_values(
+                        blazer_range,
+                        service,
+                        decorator
+                    )
+                    logging.info(logs)
+
+                    borrowed_name = logs[0][1]
+                    borrowed_class = logs[0][2]
+                    borrowed_contact = logs[0][3]
+                    borrowed_date = logs[0][4]
                     spreadsheets.update_values(
                         blazer_range,
                         {
-                            'values': [['No', '', '', '']]
+                            'values': [['No', '', '', '', '']]
                         },
                         service,
                         decorator
                     )
 
+                    record_values = spreadsheets.get_values(
+                        'Records!A2:A',
+                        service,
+                        decorator
+                    )
+                    for i, row in enumerate(record_values):
+                        if row[0] == null:
+                            row = i + 2
+                            record_range = 'Records!A%d:F%d' % (row, row)
+                            spreadsheets.update_values(
+                                record_range,
+                                {
+                                    'values': [[id_blazer, borrowed_name, borrowed_class,borrowed_contact, borrowed_date, returned_date]]
+                                },
+                                service,
+                                decorator
+
+                            )
+                            break
+
+
                     self.redirect('/blazer/' + serial_number)
                     return
+
+
 
         except client.AccessTokenRefreshError:
             self.redirect('/blazer/' + serial_number)
