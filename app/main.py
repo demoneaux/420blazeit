@@ -1,6 +1,6 @@
 import os
 import webapp2
-
+import logging
 
 from googleapiclient import discovery
 from oauth2client import client
@@ -150,18 +150,16 @@ class BlazerReturnHandler(webapp2.RequestHandler):
                 decorator
             )
             id_blazer = serial_number
-            borrowed_name = ''
-            borrowed_class = ''
-            borrower_contact = ''
-            borrowed_date = ''
             returned_date = self.request.get('returned')
             record_values = spreadsheets.get_values(
                 'Records!A2:A',
                 service,
                 decorator
             )
-            row_1 = len(record_values[0])
+            logging.info(record_values)
+            row_1 = len(record_values)
             row_1 = row_1 + 2
+            logging.info(row_1)
 
             for i, row in enumerate(values):
                 if row[0] == serial_number:
@@ -184,19 +182,17 @@ class BlazerReturnHandler(webapp2.RequestHandler):
                         service,
                         decorator
                     )
-
-
                     record_range = 'Records!A%d:F%d' % (row_1, row_1)
                     spreadsheets.update_values(
                                 record_range,
                                 {
-                                    'values': [[
-                                    id_blazer,
-                                    borrowed_name,
-                                    borrowed_class,
-                                    borrowed_contact,
-                                    borrowed_date,
-                                    returned_date
+                                'values': [[
+                                id_blazer,
+                                borrowed_name,
+                                borrowed_class,
+                                borrowed_contact,
+                                borrowed_date,
+                                returned_date
                                   ]]
                                 },
                                 service,
