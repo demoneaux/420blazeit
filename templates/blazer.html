@@ -15,6 +15,16 @@
     <th>Gender</th>
     <td>{{ blazer.gender }}</td>
   </tr>
+  <tr>
+    <th>Booking Status</th>
+    <td>
+      {% if blazer.booked %}
+        Borrowed
+      {% else %}
+        Available
+      {% endif %}
+    </td>
+  </tr>
   {% if blazer.booked %}
   <tr>
     <th>Borrower Name</th>
@@ -33,10 +43,7 @@
     <td>{{ blazer.borrower.date_borrowed }}</td>
   </tr>
   <tr>
-    <th>Booking Status</th>
-    <td>
-      Currently booked<br>
-
+    <td colspan="2">
       {% set return_action = '/blazer/' ~ blazer.serial_number ~ '/return' %}
       <form action="{{ return_action }}" method="POST">
         <label for="isbooked" id="isbookedlabel">Return</label><input type="checkbox" value="book" id="isbooked">
@@ -52,10 +59,7 @@
   </tr>
   {% else %}
   <tr>
-    <th>Booking Status</th>
-    <td>
-        Not booked<br>
-
+    <td colspan="2">
         {% set book_action = '/blazer/' ~ blazer.serial_number ~ '/book' %}
         <form action="{{ book_action }}" method="POST">
           <label for="isbooked" id="isbookedlabel">Book</label><input type="checkbox" value="book" id="isbooked">
