@@ -184,20 +184,20 @@ class BlazerReturnHandler(webapp2.RequestHandler):
                     )
                     record_range = 'Records!A%d:F%d' % (row_1, row_1)
                     spreadsheets.update_values(
-                                record_range,
-                                {
-                                'values': [[
+                        record_range,
+                        {
+                            'values': [[
                                 id_blazer,
                                 borrowed_name,
                                 borrowed_class,
                                 borrowed_contact,
                                 borrowed_date,
                                 returned_date
-                                  ]]
-                                },
-                                service,
-                                decorator
-                            )
+                            ]]
+                        },
+                        service,
+                        decorator
+                    )
                     self.redirect('/blazer/' + serial_number)
                     return
 
