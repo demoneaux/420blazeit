@@ -1,23 +1,37 @@
 {% extends 'templates/base.html' %}
 {% block content %}
 {% if blazers %}
+<div class="filter">
+  <input type="search" id="search">
+  <label for="search" placeholder=" ">Filter blazers</label>
+</div>
 <table>
   <tr>
     <th>Serial No.</th>
     <th>Gender</th>
     <th>Size</th>
   </tr>
-  {% for blazer in blazers %}
-  <tr>
-    <td><a href="/blazer/{{ blazer.serial_number }}">{{ blazer.serial_number }}</a></td>
-    <td>{{ blazer.gender }}</td>
-    <td>{{ blazer.size }}</td>
-  </tr>
-  {% endfor %}
+  <tbody id="jetsContent">
+    {% for blazer in blazers %}
+    <tr>
+      <td><a href="/blazer/{{ blazer.serial_number }}">{{ blazer.serial_number }}</a></td>
+      <td>{{ blazer.gender }}</td>
+      <td>{{ blazer.size }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 <p>
   View the <a href="https://docs.google.com/spreadsheets/d/{{ spreadsheetId }}/edit#gid=0" target="_blank">spreadsheet</a>.
 </p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jets/0.11.0/jets.min.js"></script>
+<script>
+  var jets = new Jets({
+    searchTag: '#search',
+    contentTag: '#jetsContent',
+    columns: [0]
+  });
+</script>
 {% else %}
   <p>There are no blazers.</p>
 {% endif %}
