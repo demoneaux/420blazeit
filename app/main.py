@@ -1,13 +1,12 @@
 import os
 import webapp2
-import logging
 
 from googleapiclient import discovery
 from oauth2client import client
 from oauth2client.contrib import appengine
 
 from utils import template, spreadsheets
-from utils.blazers import create_blazer, cleanup
+from utils.blazers import create_blazer
 
 discoveryServiceUrl = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
 service = discovery.build(
@@ -38,7 +37,7 @@ class AvailableBlazersHandler(webapp2.RequestHandler):
 
             template.send(self, 'listings.html', {
                 'title': 'Available Blazers',
-                'blazers': cleanup(blazers)
+                'blazers': blazers
             })
         except client.AccessTokenRefreshError:
             self.redirect('/')
@@ -61,7 +60,7 @@ class LoanedBlazersHandler(webapp2.RequestHandler):
 
             template.send(self, 'listings.html', {
                 'title': 'Loaned Blazers',
-                'blazers': cleanup(blazers)
+                'blazers': blazers
             })
         except client.AccessTokenRefreshError:
             self.redirect('/')
@@ -139,7 +138,6 @@ class BlazerBookHandler(webapp2.RequestHandler):
         except client.AccessTokenRefreshError:
             self.redirect('/blazer/' + serial_number)
 
-
 class BlazerReturnHandler(webapp2.RequestHandler):
     @decorator.oauth_required
     def post(self, serial_number):
@@ -156,10 +154,9 @@ class BlazerReturnHandler(webapp2.RequestHandler):
                 service,
                 decorator
             )
-            logging.info(record_values)
+
             row_1 = len(record_values)
             row_1 = row_1 + 2
-            logging.info(row_1)
 
             for i, row in enumerate(values):
                 if row[0] == serial_number:
