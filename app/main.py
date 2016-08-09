@@ -138,6 +138,7 @@ class BlazerBookHandler(webapp2.RequestHandler):
         except client.AccessTokenRefreshError:
             self.redirect('/blazer/' + serial_number)
 
+
 class BlazerReturnHandler(webapp2.RequestHandler):
     @decorator.oauth_required
     def post(self, serial_number):
